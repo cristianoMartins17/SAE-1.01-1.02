@@ -68,8 +68,13 @@ public class Brouillimg {
      * @return tableau de taille 'size' contenant une permutation des entiers 0..size-1
      */
     public static int[] generatePermutation(int size, int key){
+        int r=(key & 0b111111110000000); // pour obtenir les 8 premiers bits je fais juste ce ET logique entre key et 111111110000000
+        int s=(key & 0b000000001111111); // pareil pour les 7 deniers
+
         int[] scrambleTable = new int[size];
-        for (int i = 0; i < size; i++) scrambleTable[i] = i;
+
+        for (int i = 0; i < size; i++) 
+            scrambleTable[i] = ((r+(2*s+1)*i)%size);
         return scrambleTable;
     }
 
