@@ -110,6 +110,8 @@ public class Brouillimg {
      * @return indice de la ligne dans l'image brouillée (0..size-1)
      */
     public static int scrambledId(int id, int size, int key) {
-        return id;
+        int r=(key & 0b111111110000000); // pour obtenir les 8 premiers bits je fais juste ce ET logique entre key et 111111110000000
+        int s=(key & 0b000000001111111); // pareil pour les 7 deniers
+        return ((r+(2*s+1)*id)%size);
     }
 }
