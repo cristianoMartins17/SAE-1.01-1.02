@@ -32,9 +32,9 @@ public class Brouillimg {
 
         int[] perm = generatePermutation(height, key);
 
-        BufferedImage scrambledImage = scrambleLines(inputImage, perm);
-        ImageIO.write(scrambledImage, "png", new File(outPath));
-        System.out.println("Image écrite: " + outPath);
+        // BufferedImage scrambledImage = scrambleLines(inputImage, perm);
+        // ImageIO.write(scrambledImage, "png", new File(outPath));
+        // System.out.println("Image écrite: " + outPath);
     }
 
     /**
@@ -126,3 +126,5 @@ public class Brouillimg {
         System.out.println("]");
     }
 }
+
+//JDEJDEI
