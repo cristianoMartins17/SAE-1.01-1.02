@@ -114,4 +114,15 @@ public class Brouillimg {
         int s=(key & 0b000000001111111); // pareil pour les 7 deniers
         return ((r+(2*s+1)*id)%size);
     }
+
+    public static void afficherTab(int[] tab ) {
+        System.out.print("[ ");
+        for (int i = 0; i < tab.length; i++) {
+            System.out.print(tab[i]+" ");
+            if (i<tab.length-1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+    }
 }
