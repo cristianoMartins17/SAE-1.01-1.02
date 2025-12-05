@@ -18,6 +18,10 @@ public class Brouillimg {
         String outPath = (args.length >= 3) ? args[2] : "out.png";
         // Masque 0x7FFF pour garantir que la clé ne dépasse pas les 15 bits
         int key = Integer.parseInt(args[1]) & 0x7FFF ;
+        int indiceProcess= (args.length==4)? 3 : 2;
+        String process=args[indiceProcess];
+
+
 
         BufferedImage inputImage = ImageIO.read(new File(inPath));
         if (inputImage == null) {
@@ -32,10 +36,20 @@ public class Brouillimg {
         int[][] inputImageGL = rgb2gl(inputImage);
 
         int[] perm = generatePermutation(height, key);
-        afficherTab(perm);
-        BufferedImage scrambledImage = scrambleLines(inputImage, perm);
-        ImageIO.write(scrambledImage, "png", new File(outPath));
-        System.out.println("Image écrite: " + outPath);
+        switch (process) {
+            case "scrumble":
+                BufferedImage scrambledImage = scrambleLines(inputImage, perm);
+                ImageIO.write(scrambledImage, "png", new File(outPath));
+                System.out.println("Image écrite: " + outPath);
+                break;
+            case "unscrumble":
+                BufferedImage unscrambledImage = unscrambleLines(inputImage, perm);
+                ImageIO.write(unscrambledImage, "png", new File(outPath));
+                System.out.println("Image écrite: " + outPath);
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -122,6 +136,25 @@ public class Brouillimg {
             }
         }
         System.out.println("]");
+    }
+
+
+    public static BufferedImage unscrambleLines(BufferedImage inputImg, int[] perm){
+        int width = inputImg.getWidth();
+        int height = inputImg.getHeight();
+        if (perm.length != height) throw new IllegalArgumentException("Taille d'image <> taille permutation");
+
+        BufferedImage out = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+        for (int y = 0; y < height; y++) { //on parcours chaque ligne de l'image de sortie
+            int srcY = perm[y];  // position de la ligne y dans l'image brouillée
+            for (int x = 0; x < width; x++) { //on parcours chaque pixel de la ligne
+                int rgb = inputImg.getRGB(x, srcY); //on récupère la couleur du pixel dans l'image d'entrée
+                out.setRGB(x, y, rgb); //on place la couleur dans l'image de sortie
+            }
+        }
+        
+        return out;
     }
 }
 
