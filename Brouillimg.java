@@ -32,6 +32,7 @@ public class Brouillimg {
         int[][] inputImageGL = rgb2gl(inputImage);
 
         int[] perm = generatePermutation(height, key);
+        afficherTab(perm);
         BufferedImage scrambledImage = scrambleLines(inputImage, perm);
         ImageIO.write(scrambledImage, "png", new File(outPath));
         System.out.println("Image écrite: " + outPath);
@@ -91,8 +92,8 @@ public class Brouillimg {
         for (int y = 0; y < height; y++) { //on parcours chaque ligne de l'image de sortie
             int srcY = perm[y];  // position de la ligne y dans l'image brouillée
             for (int x = 0; x < width; x++) { //on parcours chaque pixel de la ligne
-                int rgb = inputImg.getRGB(x, srcY); //on récupère la couleur du pixel dans l'image d'entrée
-                out.setRGB(x, y, rgb); //on place la couleur dans l'image de sortie
+                int rgb = inputImg.getRGB(x, y); //on récupère la couleur du pixel dans l'image d'entrée
+                out.setRGB(x, srcY, rgb); //on place la couleur dans l'image de sortie
             }
         }
         
@@ -107,8 +108,8 @@ public class Brouillimg {
      * @return indice de la ligne dans l'image brouillée (0..size-1)
      */
     public static int scrambledId(int id, int size, int key) {
-        int r=(key>>7); // pour obtenir les 8 premiers bits je fais juste ce ET logique entre key et 111111110000000
-        int s=(key & 0b000000001111111); // pareil pour les 7 deniers
+        int r=(key>>7 & 0xFF); // pour obtenir les 8 premiers bits je fais juste ce ET logique entre key et 111111110000000
+        int s=(key & 0x7F); // pareil pour les 7 deniers
         return ((r+(2*s+1)*id)%size);
     }
 
