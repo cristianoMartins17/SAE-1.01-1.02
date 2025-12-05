@@ -2,6 +2,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.PublicKey;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.IntStream;
@@ -31,11 +32,11 @@ public class Brouillimg {
         int[][] inputImageGL = rgb2gl(inputImage);
 
         int[] perm = generatePermutation(height, key);
-
-        // BufferedImage scrambledImage = scrambleLines(inputImage, perm);
-        // ImageIO.write(scrambledImage, "png", new File(outPath));
-        // System.out.println("Image écrite: " + outPath);
+        BufferedImage scrambledImage = scrambleLines(inputImage, perm);
+        ImageIO.write(scrambledImage, "png", new File(outPath));
+        System.out.println("Image écrite: " + outPath);
     }
+
 
     /**
      * Convertit une image RGB en niveaux de gris (GL).
@@ -68,13 +69,9 @@ public class Brouillimg {
      * @return tableau de taille 'size' contenant une permutation des entiers 0..size-1
      */
     public static int[] generatePermutation(int size, int key){
-        int r=(key>>7); // pour obtenir les 8 premiers bits je fais juste ce ET logique entre key et 111111110000000
-        int s=(key & 0b000000001111111); // pareil pour les 7 deniers
-
         int[] scrambleTable = new int[size];
-
         for (int i = 0; i < size; i++) 
-            scrambleTable[i] = ((r+(2*s+1)*i)%size);
+            scrambleTable[i] = scrambledId(i, size, key);
         return scrambleTable;
     }
 
@@ -118,7 +115,7 @@ public class Brouillimg {
     public static void afficherTab(int[] tab ) {
         System.out.print("[ ");
         for (int i = 0; i < tab.length; i++) {
-            System.out.print(tab[i]+" ");
+            System.out.println( tab[i]+" ");
             if (i<tab.length-1) {
                 System.out.print(", ");
             }
@@ -127,4 +124,3 @@ public class Brouillimg {
     }
 }
 
-//JDEJDEI
